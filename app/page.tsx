@@ -667,8 +667,8 @@ const PixelBlast: React.FC<PixelBlastProps> = ({
 };
 
 
-// SmartNotes component that uses PixelBlast as the background
-const SmartNotes: React.FC = () => {
+// Auralis component that uses PixelBlast as the background
+const Auralis: React.FC = () => {
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -682,19 +682,29 @@ const SmartNotes: React.FC = () => {
   // Show loading state while checking authentication
   if (loading) {
     return (
-      <div className="relative min-h-screen text-white flex items-center justify-center">
-        <PixelBlast
-          variant="circle"
-          pixelSize={4}
-          color="#B19EEF"
-          liquid={true}
-          liquidStrength={0.05}
-          rippleIntensityScale={0.8}
-          rippleSpeed={0.4}
-          className="absolute inset-0 z-0"
-        />
-        <div className="relative z-10 text-xl">Loading...</div>
-      </div>
+      <>
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          zIndex: 0
+        }}>
+          <PixelBlast
+            variant="circle"
+            pixelSize={4}
+            color="#B19EEF"
+            liquid={true}
+            liquidStrength={0.05}
+            rippleIntensityScale={0.8}
+            rippleSpeed={0.4}
+          />
+        </div>
+        <div style={{ position: 'relative', zIndex: 10, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.25rem' }}>
+          Loading...
+        </div>
+      </>
     );
   }
 
@@ -704,24 +714,36 @@ const SmartNotes: React.FC = () => {
   }
 
   return (
-    <div className="relative min-h-screen text-white">
-      {/* PixelBlast Background */}
-      <PixelBlast
-        variant="circle"
-        pixelSize={4}
-        color="#B19EEF"
-        liquid={true}
-        liquidStrength={0.05}
-        rippleIntensityScale={0.8}
-        rippleSpeed={0.4}
-        className="absolute inset-0 z-0"
-      />
+    <>
+      {/* PixelBlast Background - Fixed to viewport */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 0,
+        pointerEvents: 'auto'
+      }}>
+        <PixelBlast
+          variant="circle"
+          pixelSize={3}
+          color="#B19EEF"
+          liquid={true}
+          liquidStrength={0.1}
+          rippleIntensityScale={1.2}
+          rippleSpeed={0.4}
+          patternDensity={0.8}
+          transparent={false}
+          edgeFade={0}
+        />
+      </div>
 
       {/* Content Overlay */}
-      <div className="relative z-10">
+      <div style={{ position: 'relative', zIndex: 10, minHeight: '100vh', color: 'white', pointerEvents: 'auto' }}>
         {/* Header */}
         <header className="flex justify-between items-center p-6">
-          <h1 className="text-2xl font-bold">Smart Notes</h1>
+          <h1 className="text-2xl font-bold">Auralis</h1>
           <nav>
             <Link href="/login" className="mr-4 hover:underline">Sign In</Link>
             <Link href="/signup" className="bg-purple-600 px-4 py-2 rounded hover:bg-purple-700">Get Started</Link>
@@ -792,12 +814,12 @@ const SmartNotes: React.FC = () => {
 
         {/* Footer */}
         <footer className="text-center py-8">
-          <p>Smart Notes</p>
-          <p className="text-sm">© 2025 Smart Notes. A simple, powerful note-taking app.</p>
+          <p>Auralis</p>
+          <p className="text-sm">© 2025 Auralis. A simple, powerful note-taking app.</p>
         </footer>
       </div>
-    </div>
+    </>
   );
 };
 
-export default SmartNotes;
+export default Auralis;

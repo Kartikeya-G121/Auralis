@@ -220,7 +220,7 @@ function Dashboard() {
                 colors={['#3b82f6', '#8b5cf6', '#ec4899', '#8b5cf6', '#3b82f6']}
                 animationSpeed={6}
               >
-                <h1 className="text-2xl font-bold">Smart Notes</h1>
+                <h1 className="text-2xl font-bold">Auralis</h1>
               </GradientText>
               <p className="text-sm text-gray-600">Welcome, {user?.name}</p>
             </div>
