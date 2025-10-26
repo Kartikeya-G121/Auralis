@@ -31,12 +31,12 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md"
+        className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 w-full max-w-md"
       >
         <div className="text-center mb-8">
           <motion.div
@@ -48,7 +48,7 @@ export default function LoginPage() {
             <LogIn className="w-8 h-8 text-blue-600" />
           </motion.div>
           <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
-          <p className="text-gray-600 mt-2">Sign in to Smart Notes</p>
+          <p className="text-gray-600 mt-2">Sign in to Auralis</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

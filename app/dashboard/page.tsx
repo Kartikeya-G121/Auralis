@@ -21,6 +21,9 @@ import {
   PinOff,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import SpotlightCard from '@/components/SpotlightCard';
+import Aurora from '@/components/Aurora';
+import GradientText from '@/components/GradientText';
 
 const DrawingCanvas = dynamic(() => import('@/components/DrawingCanvas'), {
   ssr: false,
@@ -197,13 +200,28 @@ function Dashboard() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 relative">
+      {/* Aurora Background */}
+      <div className="fixed inset-0 pointer-events-none opacity-30">
+        <Aurora
+          colorStops={['#3b82f6', '#8b5cf6', '#3b82f6']}
+          amplitude={1.2}
+          blend={0.6}
+          speed={0.5}
+        />
+      </div>
+
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Smart Notes</h1>
+              <GradientText
+                colors={['#3b82f6', '#8b5cf6', '#ec4899', '#8b5cf6', '#3b82f6']}
+                animationSpeed={6}
+              >
+                <h1 className="text-2xl font-bold">Auralis</h1>
+              </GradientText>
               <p className="text-sm text-gray-600">Welcome, {user?.name}</p>
             </div>
             <button
@@ -217,7 +235,7 @@ function Dashboard() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {/* Tabs */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex gap-2 bg-white p-1 rounded-lg shadow-sm">
@@ -351,15 +369,19 @@ function NoteCard({
   isSummarizing: boolean;
 }) {
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      className={`bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition ${
-        note.pinned ? 'ring-2 ring-yellow-400' : ''
-      }`}
+    <SpotlightCard
+      className="rounded-xl overflow-hidden"
+      spotlightColor="rgba(139, 92, 246, 0.15)"
     >
+      <motion.div
+        layout
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        className={`bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition ${
+          note.pinned ? 'ring-2 ring-yellow-400' : ''
+        }`}
+      >
       <div className="flex items-start justify-between mb-2">
         <h3 className="text-lg font-semibold text-gray-900 flex-1">{note.title}</h3>
         <button
@@ -443,6 +465,7 @@ function NoteCard({
         </div>
       </div>
     </motion.div>
+    </SpotlightCard>
   );
 }
 

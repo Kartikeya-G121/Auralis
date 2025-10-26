@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Smart Notes - AI-Powered Note Taking",
+  title: "Auralis - AI-Powered Note Taking",
   description: "Organize your notes with AI-powered summaries and insights",
 };
 

@@ -32,21 +32,21 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md"
+        className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 w-full max-w-md"
       >
         <div className="text-center mb-8">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring' }}
-            className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4"
+            className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4"
           >
-            <UserPlus className="w-8 h-8 text-purple-600" />
+            <UserPlus className="w-8 h-8 text-blue-600" />
           </motion.div>
           <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>
           <p className="text-gray-600 mt-2">Start organizing your notes with AI</p>
@@ -73,7 +73,7 @@ export default function SignupPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 placeholder="John Doe"
                 required
               />
@@ -90,7 +90,7 @@ export default function SignupPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 placeholder="you@example.com"
                 required
               />
@@ -107,7 +107,7 @@ export default function SignupPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 placeholder="••••••••"
                 minLength={8}
                 required
@@ -121,7 +121,7 @@ export default function SignupPage() {
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={loading}
-            className="w-full bg-purple-600 text-white py-3 rounded-lg font-medium hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Creating account...' : 'Create Account'}
           </motion.button>
@@ -129,7 +129,7 @@ export default function SignupPage() {
 
         <p className="text-center mt-6 text-gray-600">
           Already have an account?{' '}
-          <Link href="/login" className="text-purple-600 font-medium hover:underline">
+          <Link href="/login" className="text-blue-600 font-medium hover:underline">
             Sign in
           </Link>
         </p>
