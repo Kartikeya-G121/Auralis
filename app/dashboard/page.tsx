@@ -1,5 +1,6 @@
 'use client';
 
+
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -26,9 +27,11 @@ import Squares from '@/components/Squares';
 import GradientText from '@/components/GradientText';
 import { useTheme } from '@/components/ThemeProvider';
 
+
 const DrawingCanvas = dynamic(() => import('@/components/DrawingCanvas'), {
   ssr: false,
 });
+
 
 export default function DashboardPage() {
   return (
@@ -37,6 +40,7 @@ export default function DashboardPage() {
     </ProtectedRoute>
   );
 }
+
 
 function Dashboard() {
   const { user, logout } = useAuth();
@@ -52,17 +56,20 @@ function Dashboard() {
   const [drawingNote, setDrawingNote] = useState<Note | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
+
   useEffect(() => {
     if (user) {
       loadNotes();
     }
   }, [user]);
 
+
   useEffect(() => {
     if (activeTab === 'insights' && notes.length > 0) {
       loadInsights();
     }
   }, [activeTab, notes]);
+
 
   const loadNotes = async () => {
     try {
@@ -76,6 +83,7 @@ function Dashboard() {
       setLoading(false);
     }
   };
+
 
   const loadInsights = async () => {
     try {
@@ -91,8 +99,10 @@ function Dashboard() {
     }
   };
 
+
   const handleCreateNote = async () => {
     if (!newNote.title || !newNote.content || !user) return;
+
 
     try {
       const created = await notesService.createNote(
@@ -108,8 +118,10 @@ function Dashboard() {
     }
   };
 
+
   const handleUpdateNote = async () => {
     if (!editingNote || !editingNote.$id) return;
+
 
     try {
       const updated = await notesService.updateNote(editingNote.$id, {
@@ -123,6 +135,7 @@ function Dashboard() {
     }
   };
 
+
   const handleDeleteNote = async (noteId: string) => {
     try {
       await notesService.deleteNote(noteId);
@@ -132,8 +145,10 @@ function Dashboard() {
     }
   };
 
+
   const handleSummarize = async (note: Note) => {
     if (!note.$id) return;
+
 
     setSummarizing(note.$id);
     try {
@@ -143,17 +158,21 @@ function Dashboard() {
         body: JSON.stringify({ title: note.title, content: note.content }),
       });
 
+
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
 
+
       const data = await response.json();
+
 
       // Only update if we got valid data
       if (data.summary || data.tags) {
         const updateData: any = {};
         if (data.summary) updateData.summary = data.summary;
         if (data.tags && Array.isArray(data.tags)) updateData.tags = data.tags;
+
 
         const updated = await notesService.updateNote(note.$id, updateData);
         setNotes(notes.map((n) => (n.$id === updated.$id ? updated : n)));
@@ -166,8 +185,10 @@ function Dashboard() {
     }
   };
 
+
   const handleSaveDrawing = async (drawingData: string) => {
     if (!drawingNote || !drawingNote.$id) return;
+
 
     try {
       const updated = await notesService.updateNote(drawingNote.$id, {
@@ -181,8 +202,10 @@ function Dashboard() {
     }
   };
 
+
   const handleTogglePin = async (note: Note) => {
     if (!note.$id) return;
+
 
     try {
       const updated = await notesService.updateNote(note.$id, {
@@ -195,12 +218,14 @@ function Dashboard() {
     }
   };
 
+
   // Sort notes: pinned first, then by date
   const sortedNotes = [...notes].sort((a, b) => {
     if (a.pinned && !b.pinned) return -1;
     if (!a.pinned && b.pinned) return 1;
     return new Date(b.$createdAt || 0).getTime() - new Date(a.$createdAt || 0).getTime();
   });
+
 
   // Filter notes based on search query
   const filteredNotes = sortedNotes.filter((note) => {
@@ -211,6 +236,7 @@ function Dashboard() {
       (note.tags && note.tags.some((tag) => tag.toLowerCase().includes(lowerCaseQuery)))
     );
   });
+
 
   return (
     <div className="min-h-screen relative">
@@ -224,6 +250,7 @@ function Dashboard() {
           hoverFillColor='#1e1b4b'
         />
       </div>
+
 
       {/* Header */}
       <motion.header
@@ -258,7 +285,7 @@ function Dashboard() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
-                  className="text-sm text-gray-600 font-medium mt-0.5"
+                  className="text-sm text-gray-600 dark:text-gray-400 font-medium mt-0.5"
                 >
                   Welcome back, <span className="text-purple-600 font-semibold">{user?.name}</span>
                 </motion.p>
@@ -291,16 +318,19 @@ function Dashboard() {
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
       </motion.header>
 
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {/* Tabs */}
         <div className="flex items-center justify-between mb-6">
-          <div className="flex gap-2 bg-white p-1 rounded-lg shadow-sm">
+          <div className={`flex gap-2 p-1 rounded-lg shadow-sm ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
             <button
               onClick={() => setActiveTab('notes')}
               className={`flex items-center gap-2 px-4 py-2 rounded-md transition ${
                 activeTab === 'notes'
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  : theme === 'dark' 
+                    ? 'text-gray-300 hover:bg-gray-700' 
+                    : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               <FileText className="w-4 h-4" />
@@ -311,13 +341,16 @@ function Dashboard() {
               className={`flex items-center gap-2 px-4 py-2 rounded-md transition ${
                 activeTab === 'insights'
                   ? 'bg-purple-600 text-white'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  : theme === 'dark' 
+                    ? 'text-gray-300 hover:bg-gray-700' 
+                    : 'text-gray-700 hover:bg-gray-100'
               }`}
             >
               <Sparkles className="w-4 h-4" />
               AI Insights
             </button>
           </div>
+
 
           {activeTab === 'notes' && (
             <motion.button
@@ -332,6 +365,7 @@ function Dashboard() {
           )}
         </div>
 
+
         {/* Search Bar */}
         {activeTab === 'notes' && (
           <div className="mb-6">
@@ -340,10 +374,15 @@ function Dashboard() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search notes by title, content, or tags..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+              className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none ${
+                theme === 'dark'
+                  ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400'
+                  : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+              } border`}
             />
           </div>
         )}
+
 
         {/* Content */}
         <AnimatePresence mode="wait">
@@ -382,6 +421,7 @@ function Dashboard() {
         </AnimatePresence>
       </div>
 
+
       {/* Create Note Modal */}
       <AnimatePresence>
         {isCreating && (
@@ -394,6 +434,7 @@ function Dashboard() {
           />
         )}
       </AnimatePresence>
+
 
       {/* Edit Note Modal */}
       <AnimatePresence>
@@ -408,6 +449,7 @@ function Dashboard() {
         )}
       </AnimatePresence>
 
+
       {/* Drawing Canvas Modal */}
       {drawingNote && (
         <DrawingCanvas
@@ -419,6 +461,7 @@ function Dashboard() {
     </div>
   );
 }
+
 
 function NoteCard({
   note,
@@ -437,6 +480,8 @@ function NoteCard({
   onTogglePin: (note: Note) => void;
   isSummarizing: boolean;
 }) {
+  const { theme } = useTheme();
+
   return (
     <SpotlightCard
       className="rounded-xl overflow-hidden"
@@ -447,39 +492,47 @@ function NoteCard({
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
-        className={`bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition ${
+        className={`rounded-xl shadow-md p-6 hover:shadow-lg transition ${
           note.pinned ? 'ring-2 ring-yellow-400' : ''
-        }`}
+        } ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}
       >
       <div className="flex items-start justify-between mb-2">
-        <h3 className="text-lg font-semibold text-gray-900 flex-1">{note.title}</h3>
+        <h3 className={`text-lg font-semibold flex-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{note.title}</h3>
         <button
           onClick={() => onTogglePin(note)}
           className={`p-1.5 rounded-lg transition ${
             note.pinned
               ? 'text-yellow-600 bg-yellow-50'
-              : 'text-gray-400 hover:text-yellow-600 hover:bg-yellow-50'
+              : theme === 'dark'
+                ? 'text-gray-400 hover:text-yellow-600 hover:bg-gray-700'
+                : 'text-gray-400 hover:text-yellow-600 hover:bg-yellow-50'
           }`}
           title={note.pinned ? 'Unpin note' : 'Pin note'}
         >
           {note.pinned ? <Pin className="w-4 h-4 fill-current" /> : <Pin className="w-4 h-4" />}
         </button>
       </div>
-      <p className="text-gray-600 text-sm mb-4 line-clamp-3">{note.content}</p>
+      <p className={`text-sm mb-4 line-clamp-3 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>{note.content}</p>
+
 
       {note.summary && (
-        <div className="bg-blue-50 rounded-lg p-3 mb-4">
-          <p className="text-xs font-medium text-blue-900 mb-1">AI Summary</p>
-          <p className="text-sm text-blue-700">{note.summary}</p>
+        <div className={`rounded-lg p-3 mb-4 ${theme === 'dark' ? 'bg-blue-900/30 border border-blue-800' : 'bg-blue-50'}`}>
+          <p className={`text-xs font-medium mb-1 ${theme === 'dark' ? 'text-blue-300' : 'text-blue-900'}`}>AI Summary</p>
+          <p className={`text-sm ${theme === 'dark' ? 'text-blue-200' : 'text-blue-700'}`}>{note.summary}</p>
         </div>
       )}
+
 
       {note.tags && note.tags.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-4">
           {note.tags.map((tag, idx) => (
             <span
               key={idx}
-              className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full"
+              className={`px-2 py-1 text-xs rounded-full ${
+                theme === 'dark'
+                  ? 'bg-purple-900/40 text-purple-300'
+                  : 'bg-purple-100 text-purple-700'
+              }`}
             >
               {tag}
             </span>
@@ -487,18 +540,26 @@ function NoteCard({
         </div>
       )}
 
+
       {note.drawing && (
-        <div className="bg-green-50 rounded-lg p-3 mb-4 border border-green-200">
+        <div className={`rounded-lg p-3 mb-4 ${
+          theme === 'dark' 
+            ? 'bg-green-900/30 border border-green-800' 
+            : 'bg-green-50 border border-green-200'
+        }`}>
           <div className="flex items-center gap-2">
-            <Pen className="w-4 h-4 text-green-700" />
-            <p className="text-xs font-medium text-green-900">
+            <Pen className={`w-4 h-4 ${theme === 'dark' ? 'text-green-400' : 'text-green-700'}`} />
+            <p className={`text-xs font-medium ${theme === 'dark' ? 'text-green-300' : 'text-green-900'}`}>
               Contains drawing/sketch
             </p>
           </div>
         </div>
       )}
 
-      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+
+      <div className={`flex items-center justify-between pt-4 border-t ${
+        theme === 'dark' ? 'border-gray-700' : 'border-gray-100'
+      }`}>
         <div className="flex gap-3">
           <button
             onClick={() => onSummarize(note)}
@@ -509,6 +570,7 @@ function NoteCard({
             {isSummarizing ? 'Summarizing...' : 'Summarize'}
           </button>
 
+
           <button
             onClick={() => onDraw(note)}
             className="flex items-center gap-1 text-green-600 hover:text-green-700 text-sm"
@@ -518,16 +580,25 @@ function NoteCard({
           </button>
         </div>
 
+
         <div className="flex gap-2">
           <button
             onClick={() => onEdit(note)}
-            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+            className={`p-2 rounded-lg transition ${
+              theme === 'dark'
+                ? 'text-blue-400 hover:bg-gray-700'
+                : 'text-blue-600 hover:bg-blue-50'
+            }`}
           >
             <Edit className="w-4 h-4" />
           </button>
           <button
             onClick={() => note.$id && onDelete(note.$id)}
-            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+            className={`p-2 rounded-lg transition ${
+              theme === 'dark'
+                ? 'text-red-400 hover:bg-gray-700'
+                : 'text-red-600 hover:bg-red-50'
+            }`}
           >
             <Trash2 className="w-4 h-4" />
           </button>
@@ -537,6 +608,7 @@ function NoteCard({
     </SpotlightCard>
   );
 }
+
 
 function NoteModal({
   title,
@@ -551,6 +623,8 @@ function NoteModal({
   onSave: () => void;
   onClose: () => void;
 }) {
+  const { theme } = useTheme();
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -564,17 +638,22 @@ function NoteModal({
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-2xl"
+        className={`rounded-2xl shadow-xl p-6 w-full max-w-2xl ${
+          theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+        }`}
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+          <h2 className={`text-2xl font-bold ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{title}</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition"
+            className={`p-2 rounded-lg transition ${
+              theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+            }`}
           >
             <X className="w-5 h-5" />
           </button>
         </div>
+
 
         <div className="space-y-4">
           <input
@@ -582,16 +661,25 @@ function NoteModal({
             value={note.title}
             onChange={(e) => onChange({ ...note, title: e.target.value })}
             placeholder="Note title..."
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none border ${
+              theme === 'dark'
+                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+            }`}
           />
           <textarea
             value={note.content}
             onChange={(e) => onChange({ ...note, content: e.target.value })}
             placeholder="Write your note here..."
             rows={10}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none"
+            className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none border ${
+              theme === 'dark'
+                ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
+                : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+            }`}
           />
         </div>
+
 
         <div className="flex gap-3 mt-6">
           <motion.button
@@ -605,7 +693,11 @@ function NoteModal({
           </motion.button>
           <button
             onClick={onClose}
-            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition"
+            className={`px-6 py-3 rounded-lg transition ${
+              theme === 'dark'
+                ? 'border border-gray-600 text-gray-300 hover:bg-gray-700'
+                : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+            }`}
           >
             Cancel
           </button>
@@ -615,6 +707,7 @@ function NoteModal({
   );
 }
 
+
 function InsightsView({
   notes,
   categories,
@@ -622,12 +715,16 @@ function InsightsView({
   notes: Note[];
   categories: string[];
 }) {
+  const { theme } = useTheme();
   const notesWithSummary = notes.filter((n) => n.summary);
+
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+      <div className={`rounded-xl shadow-md p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+        <h2 className={`text-xl font-bold mb-4 flex items-center gap-2 ${
+          theme === 'dark' ? 'text-white' : 'text-gray-900'
+        }`}>
           <Sparkles className="w-5 h-5 text-purple-600" />
           Main Categories
         </h2>
@@ -646,12 +743,13 @@ function InsightsView({
             ))}
           </div>
         ) : (
-          <p className="text-gray-500">No insights available yet. Create more notes!</p>
+          <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>No insights available yet. Create more notes!</p>
         )}
       </div>
 
-      <div className="bg-white rounded-xl shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Summarized Notes</h2>
+
+      <div className={`rounded-xl shadow-md p-6 ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+        <h2 className={`text-xl font-bold mb-4 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>Summarized Notes</h2>
         <div className="space-y-4">
           {notesWithSummary.length > 0 ? (
             notesWithSummary.map((note) => (
@@ -661,14 +759,18 @@ function InsightsView({
                 animate={{ opacity: 1, y: 0 }}
                 className="border-l-4 border-blue-500 pl-4 py-2"
               >
-                <h3 className="font-semibold text-gray-900 mb-1">{note.title}</h3>
-                <p className="text-sm text-gray-600 mb-2">{note.summary}</p>
+                <h3 className={`font-semibold mb-1 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>{note.title}</h3>
+                <p className={`text-sm mb-2 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>{note.summary}</p>
                 {note.tags && note.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {note.tags.map((tag, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded"
+                        className={`px-2 py-1 text-xs rounded ${
+                          theme === 'dark'
+                            ? 'bg-blue-900/40 text-blue-300'
+                            : 'bg-blue-100 text-blue-700'
+                        }`}
                       >
                         {tag}
                       </span>
@@ -678,7 +780,7 @@ function InsightsView({
               </motion.div>
             ))
           ) : (
-            <p className="text-gray-500">
+            <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}>
               No summaries yet. Use the "Summarize" button on your notes!
             </p>
           )}
