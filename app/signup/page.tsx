@@ -2,7 +2,6 @@
 
 
 
-
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -15,7 +14,6 @@ import { useTheme } from '../../components/ThemeProvider';
 
 
 
-
 export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,8 +22,7 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const { signup } = useAuth();
   const router = useRouter();
-  const { theme, toggleTheme } = useTheme();
-
+  const { theme } = useTheme();
 
 
 
@@ -33,7 +30,6 @@ export default function SignupPage() {
     e.preventDefault();
     setError('');
     setLoading(true);
-
 
 
 
@@ -46,7 +42,6 @@ export default function SignupPage() {
       setLoading(false);
     }
   };
-
 
 
 
@@ -66,18 +61,7 @@ export default function SignupPage() {
           <ArrowLeft className="w-4 h-4" />
           Back to Home
         </Link>
-
-
-        {/* Theme Toggle Button (right) */}
-        <button
-          aria-label="Toggle dark mode"
-          onClick={toggleTheme}
-          className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-        >
-          {theme === 'dark' ? '🌙' : '☀️'}
-        </button>
       </div>
-
 
 
 
@@ -89,7 +73,7 @@ export default function SignupPage() {
         width: '100vw',
         height: '100vh',
         zIndex: 0,
-        backgroundColor: theme === 'dark' ? '#0a0a0a' : '#1a0a2e',
+        backgroundColor: theme === 'dark' ? '#0a0a0a' : '#fff',
         transition: 'background 0.3s'
       }}>
         <RippleGrid
@@ -105,7 +89,6 @@ export default function SignupPage() {
           vignetteStrength={1.5}
         />
       </div>
-
 
 
 
@@ -131,7 +114,6 @@ export default function SignupPage() {
 
 
 
-
             <div className="space-y-2">
               <ShinyText
                 text="Full Name"
@@ -151,7 +133,6 @@ export default function SignupPage() {
                 />
               </div>
             </div>
-
 
 
 
@@ -177,7 +158,6 @@ export default function SignupPage() {
 
 
 
-
             <div className="space-y-2">
               <ShinyText
                 text="Password"
@@ -198,7 +178,6 @@ export default function SignupPage() {
                 />
               </div>
             </div>
-
 
 
 
@@ -227,7 +206,6 @@ export default function SignupPage() {
               )}
             </motion.button>
           </form>
-
 
 
 

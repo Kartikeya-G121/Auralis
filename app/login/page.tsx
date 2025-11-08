@@ -21,7 +21,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
 
 
@@ -60,15 +60,6 @@ export default function LoginPage() {
           <ArrowLeft className="w-4 h-4" />
           Back to Home
         </Link>
-
-        {/* Theme Toggle Button (right) */}
-        <button
-          aria-label="Toggle dark mode"
-          onClick={toggleTheme}
-          className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-        >
-          {theme === 'dark' ? '🌙' : '☀️'}
-        </button>
       </div>
 
 
