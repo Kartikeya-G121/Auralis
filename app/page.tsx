@@ -8,6 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useTheme } from '../components/ThemeProvider';
+import Navbar from "@/components/Navbar";
 
 type PixelBlastVariant = 'square' | 'circle' | 'triangle' | 'diamond';
 
@@ -758,13 +759,7 @@ const Auralis: React.FC = () => {
       {/* Content Overlay */}
       <div style={{ position: 'relative', zIndex: 10, minHeight: '100vh', color: theme === 'dark' ? 'white' : '#222', pointerEvents: 'none' }}>
         {/* Header */}
-        <header className="flex justify-between items-center p-6" style={{ pointerEvents: 'auto' }}>
-          <h1 className="text-2xl font-bold">Auralis</h1>
-          <nav className="flex items-center gap-4">
-            <Link href="/login" className="hover:underline">Sign In</Link>
-            <Link href="/signup" className="bg-purple-600 px-4 py-2 rounded hover:bg-purple-700">Get Started</Link>
-          </nav>
-        </header>
+        <Navbar />
 
         {/* Hero Section */}
         <section className="text-center py-20 px-4">
